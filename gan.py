@@ -268,7 +268,7 @@ def model_loss(input_real, input_z, output_channel_dim, alpha):
     :return: A tuple of (discriminator loss, generator loss)
     """
     # Generator network here
-    g_model = generator(input_z, alpha, output_channel_dim)   
+    g_model = generator(input_z, output_channel_dim, alpha)   
     # g_model is the generator output
     
     # Discriminator network here
@@ -411,10 +411,10 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
                         train_loss_d = d_loss.eval({input_z: batch_z, input_images: batch_images})
                         train_loss_g = g_loss.eval({input_z: batch_z})
 
-                        # Save it
-                        image_name = str(i) + ".jpg"
-                        image_path = "../gan_data/images/" + image_name
-                        show_generator_output(sess, 4, input_z, data_shape[3], data_image_mode, image_path, True, False) 
+                # Save it
+                image_name = str(epoch) + ".jpg"
+                image_path = "../gan_data/images/" + image_name
+                show_generator_output(sess, 4, input_z, data_shape[3], data_image_mode, image_path, True, False) 
 
                     # Print every 5 epochs (for stability overwize the jupyter notebook will bug)
                     #if i % 1500 == 0:
