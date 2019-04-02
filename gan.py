@@ -35,7 +35,7 @@ def model_inputs(real_dim, z_dim):
     
     return inputs_real, inputs_z, learning_rate_G, learning_rate_D
 
-def generator(z, output_channel_dim, alpha, is_train=True):
+def generator(z, output_channel_dim, is_train=True):
     ''' Build the generator network.
     
         Arguments
@@ -268,7 +268,7 @@ def model_loss(input_real, input_z, output_channel_dim, alpha):
     :return: A tuple of (discriminator loss, generator loss)
     """
     # Generator network here
-    g_model = generator(input_z, output_channel_dim, alpha)   
+    g_model = generator(input_z, output_channel_dim)   
     # g_model is the generator output
     
     # Discriminator network here
@@ -440,11 +440,11 @@ import settings
 # Create the network
 #model = DGAN(real_size, z_size, learning_rate, alpha, beta1)
 
-
+alpha = settings.alpha
 
 # Load the data and train the network here
 dataset = helper.Dataset(glob(os.path.join(settings.data_resized_dir, '*.jpg')))
 
 with tf.Graph().as_default():
     losses, samples = train(settings.epochs, settings.batch_size, settings.z_dim, settings.learning_rate_D, settings.learning_rate_G, settings.beta1, dataset.get_batches,
-          dataset.shape, dataset.image_mode, settings.alpha, settings.from_checkpoint)
+          dataset.shape, dataset.image_mode, alpha, settings.from_checkpoint)
