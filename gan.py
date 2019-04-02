@@ -412,7 +412,7 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
                         train_loss_g = g_loss.eval({input_z: batch_z})
 
                 # Save it
-                image_name = str(epoch) + ".jpg"
+                image_name = str(num_epoch) + ".jpg"
                 image_path = "../gan_data/images/" + image_name
                 show_generator_output(sess, 4, input_z, data_shape[3], data_image_mode, image_path, True, False) 
 
