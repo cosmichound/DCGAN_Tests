@@ -387,12 +387,12 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
             for epoch_i in range(epoch_count):        
                 num_epoch += 1
                 print("Epoch {0}/{1}".format(num_epoch, epoch_count))
-                if num_epoch % 5 == 0:
+                if num_epoch % 50 == 0:
 
                     # Save model every 5 epochs
                     #if not os.path.exists("models/" + version):
                     #    os.makedirs("models/" + version)
-                    save_path = saver.save(sess, "../gan_data/models/model.ckpt".format(num_epoch))
+                    save_path = saver.save(sess, "../gan_data/models/model.ckpt")
                     print("Model saved")
                 
                 #print("get_batches", get_batches(batch_size))
@@ -411,10 +411,11 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
                         train_loss_d = d_loss.eval({input_z: batch_z, input_images: batch_images})
                         train_loss_g = g_loss.eval({input_z: batch_z})
 
-                # Save it
-                image_name = str(num_epoch) + ".jpg"
-                image_path = "../gan_data/images/" + image_name
-                show_generator_output(sess, 4, input_z, data_shape[3], data_image_mode, image_path, True, False) 
+                if num_epoch % 5 == 0:
+                    # Save image
+                    image_name = str(num_epoch) + ".jpg"
+                    image_path = "../gan_data/images/" + image_name
+                    show_generator_output(sess, 4, input_z, data_shape[3], data_image_mode, image_path, True, False) 
 
                     # Print every 5 epochs (for stability overwize the jupyter notebook will bug)
                     #if i % 1500 == 0:
@@ -426,7 +427,8 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
                     #         "Generator Loss: {:.4f}".format(train_loss_g))
                     #   show_generator_output(sess, 4, input_z, data_shape[3], data_image_mode, image_path, True, False)
                 
-            
+        save_path = saver.save(sess, "../gan_data/models/final.ckpt")
+        print("Final model saved")
                     
     return 0, 0
 
