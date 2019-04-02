@@ -8,3 +8,4 @@ epochs = 2000
 alpha = 0.2
 beta1 = 0.5
 from_checkpoint = False
+data_resized_dir="../gan_data/128x128x3"

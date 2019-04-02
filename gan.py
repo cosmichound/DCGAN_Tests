@@ -35,7 +35,7 @@ def model_inputs(real_dim, z_dim):
     
     return inputs_real, inputs_z, learning_rate_G, learning_rate_D
 
-def generator(z, output_channel_dim, is_train=True):
+def generator(z, output_channel_dim, alpha, is_train=True):
     ''' Build the generator network.
     
         Arguments
@@ -268,7 +268,7 @@ def model_loss(input_real, input_z, output_channel_dim, alpha):
     :return: A tuple of (discriminator loss, generator loss)
     """
     # Generator network here
-    g_model = generator(input_z, output_channel_dim)   
+    g_model = generator(input_z, alpha, output_channel_dim)   
     # g_model is the generator output
     
     # Discriminator network here
@@ -386,7 +386,7 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
         else:
             for epoch_i in range(epoch_count):        
                 num_epoch += 1
-                print("Epoch", num_epoch)
+                print("Epoch {0}/{1}".format(num_epoch, epoch_count))
                 if num_epoch % 5 == 0:
 
                     # Save model every 5 epochs
@@ -395,7 +395,7 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
                     save_path = saver.save(sess, "../gan_data/models/model.ckpt".format(num_epoch))
                     print("Model saved")
                 
-                print("get_batches", get_batches(batch_size))
+                #print("get_batches", get_batches(batch_size))
                 for batch_images in get_batches(batch_size):
                     # Random noise
                     batch_z = np.random.uniform(-1, 1, size=(batch_size, z_dim))
@@ -428,23 +428,23 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
                 
             
                     
-    return losses, samples
+    return 0, 0
 
 
 # Size input image for discriminator
 real_size = (128,128,3)
 
-import settings.py
+import settings
 
 
 # Create the network
 #model = DGAN(real_size, z_size, learning_rate, alpha, beta1)
 
-data_resized_dir="../gan_data/128x128x3"
+
 
 # Load the data and train the network here
-dataset = helper.Dataset(glob(os.path.join(data_resized_dir, '*.jpg')))
+dataset = helper.Dataset(glob(os.path.join(settings.data_resized_dir, '*.jpg')))
 
 with tf.Graph().as_default():
-    losses, samples = train(epochs, batch_size, z_dim, learning_rate_D, learning_rate_G, beta1, dataset.get_batches,
-          dataset.shape, dataset.image_mode, alpha, from_checkpoint)
+    losses, samples = train(settings.epochs, settings.batch_size, settings.z_dim, settings.learning_rate_D, settings.learning_rate_G, settings.beta1, dataset.get_batches,
+          dataset.shape, dataset.image_mode, settings.alpha, settings.from_checkpoint)
