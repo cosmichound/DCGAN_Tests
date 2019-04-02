@@ -379,7 +379,7 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
         num_epoch = 0
         
         if from_checkpoint == True:
-            saver.restore(sess, "./models/model.ckpt")
+            saver.restore(sess, "../gan_data/models/model.ckpt")
             
             # show_generator_output(sess, 4, input_z, data_shape[3], data_image_mode, image_path, True, False)
             
@@ -392,7 +392,7 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
                     # Save model every 5 epochs
                     #if not os.path.exists("models/" + version):
                     #    os.makedirs("models/" + version)
-                    save_path = saver.save(sess, "./models/model{0}.ckpt".format(num_epoch))
+                    save_path = saver.save(sess, "../gan_data/models/model.ckpt".format(num_epoch))
                     print("Model saved")
                 
                 print("get_batches", get_batches(batch_size))
@@ -413,7 +413,7 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
 
                         # Save it
                         image_name = str(i) + ".jpg"
-                        image_path = "./images/" + image_name
+                        image_path = "../gan_data/images/" + image_name
                         show_generator_output(sess, 4, input_z, data_shape[3], data_image_mode, image_path, True, False) 
 
                     # Print every 5 epochs (for stability overwize the jupyter notebook will bug)
@@ -434,22 +434,13 @@ def train(epoch_count, batch_size, z_dim, learning_rate_D, learning_rate_G, beta
 # Size input image for discriminator
 real_size = (128,128,3)
 
-# Size of latent vector to generator
-z_dim = 100
-learning_rate_D =  .00005 # Thanks to Alexia Jolicoeur Martineau https://ajolicoeur.wordpress.com/cats/
-learning_rate_G = 2e-4 # Thanks to Alexia Jolicoeur Martineau https://ajolicoeur.wordpress.com/cats/
-batch_size = 64
-#epochs = 215
-epochs = 1
-alpha = 0.2
-beta1 = 0.5
-from_checkpoint = False
+import settings.py
 
 
 # Create the network
 #model = DGAN(real_size, z_size, learning_rate, alpha, beta1)
 
-data_resized_dir="../128x128x3"
+data_resized_dir="../gan_data/128x128x3"
 
 # Load the data and train the network here
 dataset = helper.Dataset(glob(os.path.join(data_resized_dir, '*.jpg')))
